@@ -10,6 +10,8 @@ import numpy as np
 import tensorflow as tf
 
 
+ntrees = 10 # No of trees
+
 target = "Vote(Yes/No)"  # Target variable is whether the target agent voted for us or not
 
 train_df = pd.read_csv('takeda training data.csv')
@@ -37,7 +39,7 @@ X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3)
 # print(y_test.shape)
 
 from sklearn.ensemble import RandomForestClassifier #For random forest
-takeda_forest_model=RandomForestClassifier(n_estimators=100)
+takeda_forest_model=RandomForestClassifier(n_estimators= ntrees)
 
 
 takeda_forest_model.fit(X_train,y_train)
@@ -70,7 +72,7 @@ X2_train, X2_test, y2_train, y2_test = train_test_split(x2, y2, test_size=0.3)
 # print(X2_valid.shape), print(y2_valid.shape)
 # print(X2_test.shape), print(y2_test.shape)
 
-wasabi_forest_model=RandomForestClassifier(n_estimators=100)
+wasabi_forest_model=RandomForestClassifier(n_estimators= ntrees)
 
 
 wasabi_forest_model.fit(X2_train,y2_train)
@@ -105,7 +107,7 @@ X3_train, X3_test, y3_train, y3_test = train_test_split(x3, y3, test_size=0.3)
 # print(X3_test.shape), print(y3_test.shape)
 
 
-sample_forest_model=RandomForestClassifier(n_estimators=100)
+sample_forest_model=RandomForestClassifier(n_estimators= ntrees)
 
 
 sample_forest_model.fit(X3_train,y3_train)
@@ -140,7 +142,7 @@ X4_train, X4_test, y4_train, y4_test = train_test_split(x4, y4, test_size=0.3)
 # print(X4_test.shape), print(y4_test.shape)
 
 
-viking_forest_model=RandomForestClassifier(n_estimators=100)
+viking_forest_model=RandomForestClassifier(n_estimators= ntrees)
 
 
 viking_forest_model.fit(X4_train,y4_train)
@@ -173,7 +175,7 @@ X5_train, X5_test, y5_train, y5_test = train_test_split(x5, y5, test_size=0.3)
 # print(X4_test.shape), print(y4_test.shape)
 
 
-daisyo_forest_model=RandomForestClassifier(n_estimators=100)
+daisyo_forest_model=RandomForestClassifier(n_estimators= ntrees)
 
 
 daisyo_forest_model.fit(X5_train,y5_train)
