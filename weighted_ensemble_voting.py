@@ -9,184 +9,200 @@ from fast_ml.model_development import train_valid_test_split
 import numpy as np
 import tensorflow as tf
 
+import time # Importing to calculate time
+start = time.process_time()
 
-ntrees = 90 # No of trees
+ntrees = 5 # No of trees
 
-target = "Vote(Yes/No)"  # Target variable is whether the target agent voted for us or not
+import logging, json  # to generate log file
 
-train_df = pd.read_csv('takeda training data.csv')
+logging.basicConfig(filename="metrics data"+".log",level=logging.DEBUG,format='')
+logging.debug("model,trees,accuracy,time(s)")
 
 
-feature_cols = ['negative talks','positive talks','Negative length'] 
+for j in range(0,4):
+    if(j==0):
+        ntrees = 5
+    elif(j==1):
+        ntrees = 10
+    elif(j==2):
+        ntrees = 25
+    elif(j==3):
+        ntrees = 50
+#*************************Implementing for loop*************************************************************************************************
+    for i in range(0,10):
 
-x = train_df.drop(target, axis=1).values
-y = train_df[[target]].values
-y=y.ravel() #Converting to 1D array
+        target = "Vote(Yes/No)"  # Target variable is whether the target agent voted for us or not
 
+        train_df = pd.read_csv('takeda training data.csv')
 
-#takeda model
 
-X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3) 
+        feature_cols = ['negative talks','positive talks','Negative length'] 
 
-# X_train, y_train, X_valid, y_valid, X_test, y_test = train_valid_test_split(train_df, target = 'Vote(Yes/No)', 
-#                                                                             train_size=0.6, valid_size=0.2, test_size=0.2)
+        x = train_df.drop(target, axis=1).values
+        y = train_df[[target]].values
+        y=y.ravel() #Converting to 1D array
 
-# # print(X_train.shape)
-# print(y_train.shape)
-# # print(X_valid.shape)
-# print(y_valid.shape)
-# # print(X_test.shape), 
-# print(y_test.shape)
 
-from sklearn.ensemble import RandomForestClassifier #For random forest
-takeda_forest_model=RandomForestClassifier(n_estimators= ntrees)
+        #takeda model
 
+        X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3) 
 
-takeda_forest_model.fit(X_train,y_train)
-y_predtrain = takeda_forest_model.predict(X_train)
-print()
-print("Training accuracy of random forest on takeda dataset :",metrics.accuracy_score(y_train, y_predtrain))
-print()
-# Also calculating the test accuracy for this model to compare it at last
-# y_pred=takeda_forest_model.predict(X_test)
+        # X_train, y_train, X_valid, y_valid, X_test, y_test = train_valid_test_split(train_df, target = 'Vote(Yes/No)', 
+        #                                                                             train_size=0.6, valid_size=0.2, test_size=0.2)
 
-#*******************************************************************************************************************************
-#wasabi model
+        # # print(X_train.shape)
+        # print(y_train.shape)
+        # # print(X_valid.shape)
+        # print(y_valid.shape)
+        # # print(X_test.shape), 
+        # print(y_test.shape)
 
-target = "Vote(Yes/No)"  # Target variable is whether the target agent voted for us or not
+        from sklearn.ensemble import RandomForestClassifier #For random forest
+        takeda_forest_model=RandomForestClassifier(n_estimators= ntrees)
 
-train_df = pd.read_csv('wasabi training data.csv')
-feature_cols = ['negative talks','positive talks','Negative length'] 
 
-x2 = train_df.drop(target, axis=1).values
-y2 = train_df[[target]].values
-y2=y2.ravel() #Converting to 1D array
+        takeda_forest_model.fit(X_train,y_train)
+        y_predtrain = takeda_forest_model.predict(X_train)
+        print()
+        print("Training accuracy of random forest on takeda dataset :",metrics.accuracy_score(y_train, y_predtrain))
+        print()
+        # Also calculating the test accuracy for this model to compare it at last
+        # y_pred=takeda_forest_model.predict(X_test)
 
+        #*******************************************************************************************************************************
+        #wasabi model
 
-# X2_train, y2_train, X2_valid, y2_valid, X2_test, y2_test = train_valid_test_split(train_df, target = 'Vote(Yes/No)', 
-#                                                                             train_size=0.6, valid_size=0.2, test_size=0.2)
+        target = "Vote(Yes/No)"  # Target variable is whether the target agent voted for us or not
 
-X2_train, X2_test, y2_train, y2_test = train_test_split(x2, y2, test_size=0.3) 
+        train_df = pd.read_csv('wasabi training data.csv')
+        feature_cols = ['negative talks','positive talks','Negative length'] 
 
-# print(X2_train.shape), print(y2_train.shape)
-# print(X2_valid.shape), print(y2_valid.shape)
-# print(X2_test.shape), print(y2_test.shape)
+        x2 = train_df.drop(target, axis=1).values
+        y2 = train_df[[target]].values
+        y2=y2.ravel() #Converting to 1D array
 
-wasabi_forest_model=RandomForestClassifier(n_estimators= ntrees)
 
+        # X2_train, y2_train, X2_valid, y2_valid, X2_test, y2_test = train_valid_test_split(train_df, target = 'Vote(Yes/No)', 
+        #                                                                             train_size=0.6, valid_size=0.2, test_size=0.2)
 
-wasabi_forest_model.fit(X2_train,y2_train)
-y2_predtrain = wasabi_forest_model.predict(X2_train)
+        X2_train, X2_test, y2_train, y2_test = train_test_split(x2, y2, test_size=0.3) 
 
-print("Training accuracy of random forest on wasabi dataset :",metrics.accuracy_score(y2_train, y2_predtrain))
-print()
-#*******************************************************************************************************************************
+        # print(X2_train.shape), print(y2_train.shape)
+        # print(X2_valid.shape), print(y2_valid.shape)
+        # print(X2_test.shape), print(y2_test.shape)
 
+        wasabi_forest_model=RandomForestClassifier(n_estimators= ntrees)
 
-# sample agent model  
 
-target = "Vote(Yes/No)"  # Target variable is whether the target agent voted for us or not
+        wasabi_forest_model.fit(X2_train,y2_train)
+        y2_predtrain = wasabi_forest_model.predict(X2_train)
 
-train_df = pd.read_csv('sample training data.csv')
+        print("Training accuracy of random forest on wasabi dataset :",metrics.accuracy_score(y2_train, y2_predtrain))
+        print()
+        #*******************************************************************************************************************************
 
-# feature_cols = ['negative talks','positive talks','Negative length'] 
 
-x3 = train_df.drop(target, axis=1).values
+        # sample agent model  
 
-y3 = train_df[[target]].values
+        target = "Vote(Yes/No)"  # Target variable is whether the target agent voted for us or not
 
-y3=y3.ravel() #Converting to 1D array
+        train_df = pd.read_csv('sample training data.csv')
 
+        # feature_cols = ['negative talks','positive talks','Negative length'] 
 
-# X3_train, y3_train, X3_valid, y3_valid, X3_test, y3_test = train_valid_test_split(train_df, target = 'Vote(Yes/No)', train_size=0.6, valid_size=0.2, test_size=0.2)
+        x3 = train_df.drop(target, axis=1).values
 
-X3_train, X3_test, y3_train, y3_test = train_test_split(x3, y3, test_size=0.3) 
+        y3 = train_df[[target]].values
 
-# print(X3_train.shape), print(y3_train.shape)
-# print(X3_valid.shape), print(y3_valid.shape)
-# print(X3_test.shape), print(y3_test.shape)
+        y3=y3.ravel() #Converting to 1D array
 
 
-sample_forest_model=RandomForestClassifier(n_estimators= ntrees)
+        # X3_train, y3_train, X3_valid, y3_valid, X3_test, y3_test = train_valid_test_split(train_df, target = 'Vote(Yes/No)', train_size=0.6, valid_size=0.2, test_size=0.2)
 
+        X3_train, X3_test, y3_train, y3_test = train_test_split(x3, y3, test_size=0.3) 
 
-sample_forest_model.fit(X3_train,y3_train)
-y3_predtrain = sample_forest_model.predict(X3_train)
+        # print(X3_train.shape), print(y3_train.shape)
+        # print(X3_valid.shape), print(y3_valid.shape)
+        # print(X3_test.shape), print(y3_test.shape)
 
-print("Training accuracy of random forest on sample dataset :",metrics.accuracy_score(y3_train, y3_predtrain))
-print()
 
+        sample_forest_model=RandomForestClassifier(n_estimators= ntrees)
 
-#***************************************************************************************************************************************
 
+        sample_forest_model.fit(X3_train,y3_train)
+        y3_predtrain = sample_forest_model.predict(X3_train)
 
-# viking agent model
+        print("Training accuracy of random forest on sample dataset :",metrics.accuracy_score(y3_train, y3_predtrain))
+        print()
 
-target = "Vote(Yes/No)"  # Target variable is whether the target agent voted for us or not
 
-train_df = pd.read_csv('viking training data.csv')
-feature_cols = ['negative talks','positive talks','Negative length'] 
+        #***************************************************************************************************************************************
 
-x4 = train_df.drop(target, axis=1).values
-y4 = train_df[[target]].values
-y4=y4.ravel() #Converting to 1D array
 
+        # viking agent model
 
-# X4_train, y4_train, X4_valid, y4_valid, X4_test, y4_test = train_valid_test_split(train_df, target = 'Vote(Yes/No)', 
-#                                                                             train_size=0.6, valid_size=0.2, test_size=0.2)
+        target = "Vote(Yes/No)"  # Target variable is whether the target agent voted for us or not
 
-X4_train, X4_test, y4_train, y4_test = train_test_split(x4, y4, test_size=0.3) 
+        train_df = pd.read_csv('viking training data.csv')
+        feature_cols = ['negative talks','positive talks','Negative length'] 
 
-# print(X4_train.shape), print(y4_train.shape)
-# print(X4_valid.shape), print(y4_valid.shape)
-# print(X4_test.shape), print(y4_test.shape)
+        x4 = train_df.drop(target, axis=1).values
+        y4 = train_df[[target]].values
+        y4=y4.ravel() #Converting to 1D array
 
 
-viking_forest_model=RandomForestClassifier(n_estimators= ntrees)
+        # X4_train, y4_train, X4_valid, y4_valid, X4_test, y4_test = train_valid_test_split(train_df, target = 'Vote(Yes/No)', 
+        #                                                                             train_size=0.6, valid_size=0.2, test_size=0.2)
 
+        X4_train, X4_test, y4_train, y4_test = train_test_split(x4, y4, test_size=0.3) 
 
-viking_forest_model.fit(X4_train,y4_train)
-y4_predtrain = viking_forest_model.predict(X4_train)
+        # print(X4_train.shape), print(y4_train.shape)
+        # print(X4_valid.shape), print(y4_valid.shape)
+        # print(X4_test.shape), print(y4_test.shape)
 
-print("Training accuracy of random forest on viking agent dataset :",metrics.accuracy_score(y4_train, y4_predtrain))
-print()
 
-#***************************************************************************************************************************************
+        viking_forest_model=RandomForestClassifier(n_estimators= ntrees)
 
-# daisyo agent model
 
-target = "Vote(Yes/No)"  # Target variable is whether the target agent voted for us or not
+        viking_forest_model.fit(X4_train,y4_train)
+        y4_predtrain = viking_forest_model.predict(X4_train)
 
-train_df = pd.read_csv('daisyo training data.csv')
-feature_cols = ['negative talks','positive talks','Negative length'] 
+        print("Training accuracy of random forest on viking agent dataset :",metrics.accuracy_score(y4_train, y4_predtrain))
+        print()
 
-x5 = train_df.drop(target, axis=1).values
-y5 = train_df[[target]].values
-y5=y5.ravel() #Converting to 1D array
+        #***************************************************************************************************************************************
 
+        # daisyo agent model
 
-# X4_train, y4_train, X4_valid, y4_valid, X4_test, y4_test = train_valid_test_split(train_df, target = 'Vote(Yes/No)', 
-#                                                                             train_size=0.6, valid_size=0.2, test_size=0.2)
+        target = "Vote(Yes/No)"  # Target variable is whether the target agent voted for us or not
 
-X5_train, X5_test, y5_train, y5_test = train_test_split(x5, y5, test_size=0.3) 
+        train_df = pd.read_csv('daisyo training data.csv')
+        feature_cols = ['negative talks','positive talks','Negative length'] 
 
-# print(X4_train.shape), print(y4_train.shape)
-# print(X4_valid.shape), print(y4_valid.shape)
-# print(X4_test.shape), print(y4_test.shape)
+        x5 = train_df.drop(target, axis=1).values
+        y5 = train_df[[target]].values
+        y5=y5.ravel() #Converting to 1D array
 
 
-daisyo_forest_model=RandomForestClassifier(n_estimators= ntrees)
+        # X4_train, y4_train, X4_valid, y4_valid, X4_test, y4_test = train_valid_test_split(train_df, target = 'Vote(Yes/No)', 
+        #                                                                             train_size=0.6, valid_size=0.2, test_size=0.2)
 
+        X5_train, X5_test, y5_train, y5_test = train_test_split(x5, y5, test_size=0.3) 
 
-daisyo_forest_model.fit(X5_train,y5_train)
-y5_predtrain = daisyo_forest_model.predict(X5_train)
+        # print(X4_train.shape), print(y4_train.shape)
+        # print(X4_valid.shape), print(y4_valid.shape)
+        # print(X4_test.shape), print(y4_test.shape)
 
-print("Training accuracy of random forest on daisyo agent dataset :",metrics.accuracy_score(y5_train, y5_predtrain))
-print()
 
+        daisyo_forest_model=RandomForestClassifier(n_estimators= ntrees)
 
 
+        daisyo_forest_model.fit(X5_train,y5_train)
+        y5_predtrain = daisyo_forest_model.predict(X5_train)
 
+        print("Training accuracy of random forest on daisyo agent dataset :",metrics.accuracy_score(y5_train, y5_predtrain))
+        print()
 
 
 
@@ -196,344 +212,352 @@ print()
 
 
 
-#***************************************************************************************************************************************
-# Applying weighted ensemble learning
-model_weights = [1]*5
 
 
-takeda = takeda_forest_model.predict(X_test)
-wasabi = wasabi_forest_model.predict(X_test)
-sample = sample_forest_model.predict(X_test)
-viking = viking_forest_model.predict(X_test)
-daisyo = daisyo_forest_model.predict(X_test)
 
-# yvalid = np.array(y_valid)
-# Applying weighted ensemble learning
-model_weights = [1]*5
 
+        #***************************************************************************************************************************************
+        # Applying weighted ensemble learning
+        model_weights = [1]*5
 
-for i in range(len(X_test)):
 
-    ans = [0,0,0,0,0]
-    if(y_test[i] == takeda[i]):
-        ans[0] = 1 
-    if(y_test[i] == wasabi[i]):
-        ans[1] = 1 
-    if(y_test[i] == sample[i]):
-        ans[2] = 1 
-    if(y_test[i] == viking[i]):
-        ans[3] = 1 
-    if(y_test[i] == daisyo[i]):
-        ans[4] = 1
-    
-    if(ans[0]==1):
-        model_weights[0] += ans.count(0)/len(ans)
+        takeda = takeda_forest_model.predict(X_test)
+        wasabi = wasabi_forest_model.predict(X_test)
+        sample = sample_forest_model.predict(X_test)
+        viking = viking_forest_model.predict(X_test)
+        daisyo = daisyo_forest_model.predict(X_test)
 
-    if(ans[1]==1):
-        model_weights[1]+= ans.count(0)/len(ans)
+        # yvalid = np.array(y_valid)
+        # Applying weighted ensemble learning
+        model_weights = [1]*5
 
-    if(ans[2]==1):
-        model_weights[2]+= ans.count(0)/len(ans)
 
-    if(ans[3]==1):
-        model_weights[3]+= ans.count(0)/len(ans)
+        for i in range(len(X_test)):
 
-    if(ans[4]==1):
-        model_weights[4]+= ans.count(0)/len(ans)
+            ans = [0,0,0,0,0]
+            if(y_test[i] == takeda[i]):
+                ans[0] = 1 
+            if(y_test[i] == wasabi[i]):
+                ans[1] = 1 
+            if(y_test[i] == sample[i]):
+                ans[2] = 1 
+            if(y_test[i] == viking[i]):
+                ans[3] = 1 
+            if(y_test[i] == daisyo[i]):
+                ans[4] = 1
+            
+            if(ans[0]==1):
+                model_weights[0] += ans.count(0)/len(ans)
 
-    # Remove comment to see how weights are changing    
-    # print(ans)
-    # print(model_weights)
-    # print("************")
+            if(ans[1]==1):
+                model_weights[1]+= ans.count(0)/len(ans)
 
-print("The weights of the models are:",model_weights )
-print()
+            if(ans[2]==1):
+                model_weights[2]+= ans.count(0)/len(ans)
 
+            if(ans[3]==1):
+                model_weights[3]+= ans.count(0)/len(ans)
 
-takeda = takeda_forest_model.predict(X2_test)
-wasabi = wasabi_forest_model.predict(X2_test)
-sample = sample_forest_model.predict(X2_test)
-viking = viking_forest_model.predict(X2_test)
-daisyo = daisyo_forest_model.predict(X2_test)
+            if(ans[4]==1):
+                model_weights[4]+= ans.count(0)/len(ans)
 
-print("THe length 1 is =" ,len(daisyo))
-print("THe length 1 is =" ,len(X2_test))
-for i in range(len(X2_test)):
-    
-    ans = [0,0,0,0,0]
-    if(y2_test[i] == takeda[i]):
-        ans[0] = 1 
-    if(y2_test[i] == wasabi[i]):
-        ans[1] = 1 
-    if(y2_test[i] == sample[i]):
-        ans[2] = 1 
-    if(y2_test[i] == viking[i]):
-        ans[3] = 1 
-    if(y2_test[i] == daisyo[i]):
-        ans[4] = 1
-    
-    if(ans[0]==1):
-        model_weights[0] += ans.count(0)/len(ans)
+            # Remove comment to see how weights are changing    
+            # print(ans)
+            # print(model_weights)
+            # print("************")
 
-    if(ans[1]==1):
-        model_weights[1]+= ans.count(0)/len(ans)
+        print("The weights of the models are:",model_weights )
+        print()
 
-    if(ans[2]==1):
-        model_weights[2]+= ans.count(0)/len(ans)
 
-    if(ans[3]==1):
-        model_weights[3]+= ans.count(0)/len(ans)
-    
-    if(ans[4]==1):
-        model_weights[4]+= ans.count(0)/len(ans)
+        takeda = takeda_forest_model.predict(X2_test)
+        wasabi = wasabi_forest_model.predict(X2_test)
+        sample = sample_forest_model.predict(X2_test)
+        viking = viking_forest_model.predict(X2_test)
+        daisyo = daisyo_forest_model.predict(X2_test)
 
+        print("THe length 1 is =" ,len(daisyo))
+        print("THe length 1 is =" ,len(X2_test))
+        for i in range(len(X2_test)):
+            
+            ans = [0,0,0,0,0]
+            if(y2_test[i] == takeda[i]):
+                ans[0] = 1 
+            if(y2_test[i] == wasabi[i]):
+                ans[1] = 1 
+            if(y2_test[i] == sample[i]):
+                ans[2] = 1 
+            if(y2_test[i] == viking[i]):
+                ans[3] = 1 
+            if(y2_test[i] == daisyo[i]):
+                ans[4] = 1
+            
+            if(ans[0]==1):
+                model_weights[0] += ans.count(0)/len(ans)
 
-takeda = takeda_forest_model.predict(X3_test)
-wasabi = wasabi_forest_model.predict(X3_test)
-sample = sample_forest_model.predict(X3_test)
-viking = viking_forest_model.predict(X3_test)
-daisyo = daisyo_forest_model.predict(X3_test)
+            if(ans[1]==1):
+                model_weights[1]+= ans.count(0)/len(ans)
 
-print("The weights of the models are:",model_weights )
-print()
+            if(ans[2]==1):
+                model_weights[2]+= ans.count(0)/len(ans)
 
+            if(ans[3]==1):
+                model_weights[3]+= ans.count(0)/len(ans)
+            
+            if(ans[4]==1):
+                model_weights[4]+= ans.count(0)/len(ans)
 
-for i in range(len(X3_test)):
-    
-    ans = [0,0,0,0,0]
-    if(y3_test[i] == takeda[i]):
-        ans[0] = 1 
-    if(y3_test[i] == wasabi[i]):
-        ans[1] = 1 
-    if(y3_test[i] == sample[i]):
-        ans[2] = 1 
-    if(y3_test[i] == viking[i]):
-        ans[3] = 1 
-    if(y3_test[i] == daisyo[i]):
-        ans[4] = 1
 
-    if(ans[0]==1):
-        model_weights[0] += ans.count(0)/len(ans)
+        takeda = takeda_forest_model.predict(X3_test)
+        wasabi = wasabi_forest_model.predict(X3_test)
+        sample = sample_forest_model.predict(X3_test)
+        viking = viking_forest_model.predict(X3_test)
+        daisyo = daisyo_forest_model.predict(X3_test)
 
-    if(ans[1]==1):
-        model_weights[1]+= ans.count(0)/len(ans)
+        print("The weights of the models are:",model_weights )
+        print()
 
-    if(ans[2]==1):
-        model_weights[2]+= ans.count(0)/len(ans)
 
-    if(ans[3]==1):
-        model_weights[3]+= ans.count(0)/len(ans)
+        for i in range(len(X3_test)):
+            
+            ans = [0,0,0,0,0]
+            if(y3_test[i] == takeda[i]):
+                ans[0] = 1 
+            if(y3_test[i] == wasabi[i]):
+                ans[1] = 1 
+            if(y3_test[i] == sample[i]):
+                ans[2] = 1 
+            if(y3_test[i] == viking[i]):
+                ans[3] = 1 
+            if(y3_test[i] == daisyo[i]):
+                ans[4] = 1
 
-    if(ans[4]==1):
-        model_weights[4]+= ans.count(0)/len(ans)
+            if(ans[0]==1):
+                model_weights[0] += ans.count(0)/len(ans)
 
-print("The weights of the models are:",model_weights )
-print()
+            if(ans[1]==1):
+                model_weights[1]+= ans.count(0)/len(ans)
 
-takeda = takeda_forest_model.predict(X4_test)
-wasabi = wasabi_forest_model.predict(X4_test)
-sample = sample_forest_model.predict(X4_test)
-viking = viking_forest_model.predict(X4_test)
-daisyo = daisyo_forest_model.predict(X4_test)
+            if(ans[2]==1):
+                model_weights[2]+= ans.count(0)/len(ans)
 
-for i in range(len(X4_test)):
-    
-    ans = [0,0,0,0,0]
-    if(y4_test[i] == takeda[i]):
-        ans[0] = 1 
-    if(y4_test[i] == wasabi[i]):
-        ans[1] = 1 
-    if(y4_test[i] == sample[i]):
-        ans[2] = 1 
-    if(y4_test[i] == viking[i]):
-        ans[3] = 1 
-    if(y4_test[i] == daisyo[i]):
-        ans[4] = 1
+            if(ans[3]==1):
+                model_weights[3]+= ans.count(0)/len(ans)
 
+            if(ans[4]==1):
+                model_weights[4]+= ans.count(0)/len(ans)
 
-    if(ans[0]==1):
-        model_weights[0] += ans.count(0)/len(ans)
+        print("The weights of the models are:",model_weights )
+        print()
 
-    if(ans[1]==1):
-        model_weights[1]+= ans.count(0)/len(ans)
+        takeda = takeda_forest_model.predict(X4_test)
+        wasabi = wasabi_forest_model.predict(X4_test)
+        sample = sample_forest_model.predict(X4_test)
+        viking = viking_forest_model.predict(X4_test)
+        daisyo = daisyo_forest_model.predict(X4_test)
 
-    if(ans[2]==1):
-        model_weights[2]+= ans.count(0)/len(ans)
+        for i in range(len(X4_test)):
+            
+            ans = [0,0,0,0,0]
+            if(y4_test[i] == takeda[i]):
+                ans[0] = 1 
+            if(y4_test[i] == wasabi[i]):
+                ans[1] = 1 
+            if(y4_test[i] == sample[i]):
+                ans[2] = 1 
+            if(y4_test[i] == viking[i]):
+                ans[3] = 1 
+            if(y4_test[i] == daisyo[i]):
+                ans[4] = 1
 
-    if(ans[3]==1):
-        model_weights[3]+= ans.count(0)/len(ans)
 
-    if(ans[4]==1):
-        model_weights[4]+= ans.count(0)/len(ans)
+            if(ans[0]==1):
+                model_weights[0] += ans.count(0)/len(ans)
 
-print("The final weights of the models are:",model_weights )
-print()
+            if(ans[1]==1):
+                model_weights[1]+= ans.count(0)/len(ans)
 
+            if(ans[2]==1):
+                model_weights[2]+= ans.count(0)/len(ans)
 
+            if(ans[3]==1):
+                model_weights[3]+= ans.count(0)/len(ans)
 
-takeda = takeda_forest_model.predict(X5_test)
-wasabi = wasabi_forest_model.predict(X5_test)
-sample = sample_forest_model.predict(X5_test)
-viking = viking_forest_model.predict(X5_test)
-daisyo = daisyo_forest_model.predict(X5_test)
+            if(ans[4]==1):
+                model_weights[4]+= ans.count(0)/len(ans)
 
-for i in range(len(X5_test)):
-    
-    ans = [0,0,0,0,0]
-    if(y5_test[i] == takeda[i]):
-        ans[0] = 1 
-    if(y5_test[i] == wasabi[i]):
-        ans[1] = 1 
-    if(y5_test[i] == sample[i]):
-        ans[2] = 1 
-    if(y5_test[i] == viking[i]):
-        ans[3] = 1 
-    if(y5_test[i] == daisyo[i]):
-        ans[4] = 1
+        print("The final weights of the models are:",model_weights )
+        print()
 
 
-    if(ans[0]==1):
-        model_weights[0] += ans.count(0)/len(ans)
 
-    if(ans[1]==1):
-        model_weights[1]+= ans.count(0)/len(ans)
+        takeda = takeda_forest_model.predict(X5_test)
+        wasabi = wasabi_forest_model.predict(X5_test)
+        sample = sample_forest_model.predict(X5_test)
+        viking = viking_forest_model.predict(X5_test)
+        daisyo = daisyo_forest_model.predict(X5_test)
 
-    if(ans[2]==1):
-        model_weights[2]+= ans.count(0)/len(ans)
+        for i in range(len(X5_test)):
+            
+            ans = [0,0,0,0,0]
+            if(y5_test[i] == takeda[i]):
+                ans[0] = 1 
+            if(y5_test[i] == wasabi[i]):
+                ans[1] = 1 
+            if(y5_test[i] == sample[i]):
+                ans[2] = 1 
+            if(y5_test[i] == viking[i]):
+                ans[3] = 1 
+            if(y5_test[i] == daisyo[i]):
+                ans[4] = 1
 
-    if(ans[3]==1):
-        model_weights[3]+= ans.count(0)/len(ans)
 
-    if(ans[4]==1):
-        model_weights[4]+= ans.count(0)/len(ans)
+            if(ans[0]==1):
+                model_weights[0] += ans.count(0)/len(ans)
 
-print("The final weights of the models are:",model_weights )
-print()
+            if(ans[1]==1):
+                model_weights[1]+= ans.count(0)/len(ans)
 
+            if(ans[2]==1):
+                model_weights[2]+= ans.count(0)/len(ans)
 
+            if(ans[3]==1):
+                model_weights[3]+= ans.count(0)/len(ans)
 
-# testing on tomato
+            if(ans[4]==1):
+                model_weights[4]+= ans.count(0)/len(ans)
 
-train_df = pd.read_csv('test data.csv')
+        print("The final weights of the models are:",model_weights )
+        print()
 
 
-feature_cols = ['negative talks','positive talks','Negative length'] 
 
-x5 = train_df.drop(target, axis=1).values
-y5 = train_df[[target]].values
-y5=y5.ravel() #Converting to 1D array
+        # testing on tomato
 
+        train_df = pd.read_csv('test data.csv')
 
-#ensemble model
 
-# X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.0) 
+        feature_cols = ['negative talks','positive talks','Negative length'] 
 
+        x5 = train_df.drop(target, axis=1).values
+        y5 = train_df[[target]].values
+        y5=y5.ravel() #Converting to 1D array
 
 
+        #ensemble model
 
-takeda1 = takeda_forest_model.predict(x5)
-wasabi1 = wasabi_forest_model.predict(x5)
-sample1 = sample_forest_model.predict(x5)
-viking1 = viking_forest_model.predict(x5)
-daisyo1 = daisyo_forest_model.predict(x5)
+        # X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.0) 
 
-output = [0]*len(x5)
-output2 = [0]*len(x5)
-checker = [0,0,0,0,0]
-ones =0
-zeroes =0
-for i in range(len(x5)):
-    checker = [0,0,0,0,0]
-    ones = 0
-    zeroes = 0
-    if(takeda1[i]==1):
-        checker[0] = 1
 
-    if(wasabi1[i]==1):
-        checker[1] = 1
 
-    if(sample1[i]==1):
-        checker[2] = 1
 
-    if(viking1[i]==1):
-        checker[3] = 1
+        takeda1 = takeda_forest_model.predict(x5)
+        wasabi1 = wasabi_forest_model.predict(x5)
+        sample1 = sample_forest_model.predict(x5)
+        viking1 = viking_forest_model.predict(x5)
+        daisyo1 = daisyo_forest_model.predict(x5)
 
-    if(daisyo1[i]==1):
-        checker[4] = 1
+        output = [0]*len(x5)
+        output2 = [0]*len(x5)
+        checker = [0,0,0,0,0]
+        ones =0
+        zeroes =0
+        for i in range(len(x5)):
+            checker = [0,0,0,0,0]
+            ones = 0
+            zeroes = 0
+            if(takeda1[i]==1):
+                checker[0] = 1
 
-    # if(checker.count(1)>checker.count(0)):
-    #     output2[i] = 1
-    # else:
-    #     output2[i] = 0
+            if(wasabi1[i]==1):
+                checker[1] = 1
 
-    for j in range(len(checker)):
-        if(checker[j]==1):
-            ones += model_weights[j]
+            if(sample1[i]==1):
+                checker[2] = 1
 
-        else:
-            zeroes+= model_weights[j]
-    # print("zeroes = ",zeroes)
-    # print("ones = ",ones)
-    if(ones>zeroes):
-        output[i] = 1   
-    else:
-        output[i] = 0
-    
-    # print(output[i])
+            if(viking1[i]==1):
+                checker[3] = 1
 
+            if(daisyo1[i]==1):
+                checker[4] = 1
 
+            # if(checker.count(1)>checker.count(0)):
+            #     output2[i] = 1
+            # else:
+            #     output2[i] = 0
 
+            for j in range(len(checker)):
+                if(checker[j]==1):
+                    ones += model_weights[j]
 
-y_pred=takeda_forest_model.predict(x5)
+                else:
+                    zeroes+= model_weights[j]
+            # print("zeroes = ",zeroes)
+            # print("ones = ",ones)
+            if(ones>zeroes):
+                output[i] = 1   
+            else:
+                output[i] = 0
+            
+            # print(output[i])
 
 
-# print(output)
-print("The test accuracy of weighted ensemble voting method is : ",metrics.accuracy_score(y5, output) )
-print()
 
-print('Mean Absolute Error:', metrics.mean_absolute_error(y5, output))
-print('Mean Squared Error:', metrics.mean_squared_error(y5, output))
-print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y5, output)))
 
-print()
-print("Test accuracy of traditional random forest using takeda model is :",metrics.accuracy_score(y5, y_pred))
-print()
+        y_pred=takeda_forest_model.predict(x5)
+        calt = time.process_time() - start
+        # print("The time taken is = ",time.process_time() - start)
+        # print(time.process_time() - start)          # Printing the time
 
-print('Mean Absolute Error:', metrics.mean_absolute_error(y5, y_pred))
-print('Mean Squared Error:', metrics.mean_squared_error(y5, y_pred))
-print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y5, y_pred)))
+        # print(output)
+        print("The test accuracy of weighted ensemble voting method is : ",metrics.accuracy_score(y5, output) )
+        print()
 
-print()
-# Plotting the confusion matrix
+        print('Mean Absolute Error:', metrics.mean_absolute_error(y5, output))
+        print('Mean Squared Error:', metrics.mean_squared_error(y5, output))
+        print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y5, output)))
 
-# cm = confusion_matrix(y5, output)
+        print()
+        print("Test accuracy of traditional random forest using takeda model is :",metrics.accuracy_score(y5, y_pred))
+        print()
 
-# fig, ax = plt.subplots(figsize=(8, 8))
-# ax.imshow(cm)
-# ax.grid(False)
-# ax.xaxis.set(ticks=(0, 1), ticklabels=('Predicted 0s', 'Predicted 1s'))
-# ax.yaxis.set(ticks=(0, 1), ticklabels=('Actual 0s', 'Actual 1s'))
-# ax.set_ylim(1.5, -0.5)
-# for i in range(2):
-#     for j in range(2):
-#         ax.text(j, i, cm[i, j], ha='center', va='center', color='red')
-# plt.show()
+        print('Mean Absolute Error:', metrics.mean_absolute_error(y5, y_pred))
+        print('Mean Squared Error:', metrics.mean_squared_error(y5, y_pred))
+        print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y5, y_pred)))
 
+        print()
+        logging.debug("takeda  , {}  , {:02f}  , {:02f}  ".format(ntrees,metrics.accuracy_score(y5, y_pred) *100,calt ) )
+        logging.debug("ensemble  , {}  , {:02f}  , {:02f}  ".format(ntrees,metrics.accuracy_score(y5, output)*100 ,calt ) )
+        # Plotting the confusion matrix
 
+        # cm = confusion_matrix(y5, output)
 
+        # fig, ax = plt.subplots(figsize=(8, 8))
+        # ax.imshow(cm)
+        # ax.grid(False)
+        # ax.xaxis.set(ticks=(0, 1), ticklabels=('Predicted 0s', 'Predicted 1s'))
+        # ax.yaxis.set(ticks=(0, 1), ticklabels=('Actual 0s', 'Actual 1s'))
+        # ax.set_ylim(1.5, -0.5)
+        # for i in range(2):
+        #     for j in range(2):
+        #         ax.text(j, i, cm[i, j], ha='center', va='center', color='red')
+        # plt.show()
 
 
-# # Plotting the confusion matrix
 
-# cm = confusion_matrix(y5, y_pred)
 
-# fig, ax = plt.subplots(figsize=(8, 8))
-# ax.imshow(cm)
-# ax.grid(False)
-# ax.xaxis.set(ticks=(0, 1), ticklabels=('Predicted 0s', 'Predicted 1s'))
-# ax.yaxis.set(ticks=(0, 1), ticklabels=('Actual 0s', 'Actual 1s'))
-# ax.set_ylim(1.5, -0.5)
-# for i in range(2):
-#     for j in range(2):
-#         ax.text(j, i, cm[i, j], ha='center', va='center', color='red')
-# plt.show()
+
+        # # Plotting the confusion matrix
+
+        # cm = confusion_matrix(y5, y_pred)
+
+        # fig, ax = plt.subplots(figsize=(8, 8))
+        # ax.imshow(cm)
+        # ax.grid(False)
+        # ax.xaxis.set(ticks=(0, 1), ticklabels=('Predicted 0s', 'Predicted 1s'))
+        # ax.yaxis.set(ticks=(0, 1), ticklabels=('Actual 0s', 'Actual 1s'))
+        # ax.set_ylim(1.5, -0.5)
+        # for i in range(2):
+        #     for j in range(2):
+        #         ax.text(j, i, cm[i, j], ha='center', va='center', color='red')
+        # plt.show()
