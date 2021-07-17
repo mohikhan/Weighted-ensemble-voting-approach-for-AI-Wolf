@@ -528,6 +528,8 @@ for j in range(0,4):
         print()
         logging.debug("takeda  , {}  , {:02f}  , {:02f}  ".format(ntrees,metrics.accuracy_score(y5, y_pred) *100,calt ) )
         logging.debug("ensemble  , {}  , {:02f}  , {:02f}  ".format(ntrees,metrics.accuracy_score(y5, output)*100 ,calt ) )
+
+    
         # Plotting the confusion matrix
 
         # cm = confusion_matrix(y5, output)
@@ -561,3 +563,5 @@ for j in range(0,4):
         #     for j in range(2):
         #         ax.text(j, i, cm[i, j], ha='center', va='center', color='red')
         # plt.show()
+dataframe1 = pd.read_csv("metrics data.log")
+dataframe1.to_csv('metrics data.csv', index = None)
