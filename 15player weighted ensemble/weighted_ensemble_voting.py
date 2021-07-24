@@ -9,28 +9,24 @@ from fast_ml.model_development import train_valid_test_split
 import numpy as np
 import tensorflow as tf
 
-
-from sklearn.metrics import f1_score  # TO print f score
-
 import time # Importing to calculate time
 start = time.process_time()
 
 ntrees = 5 # No of trees
 
 import logging, json  # to generate log file
-
-log = logging.getLogger('UNIQUE_NAME_HERE')
-log.setLevel(logging.DEBUG)
-
-
-log.basicConfig(filename="metrics data"+".log",level=logging.DEBUG,format='')
-# logging.debug("model,trees,accuracy,f1score,FP,FN")
-
+# logging.basicConfig(filename='metrics ' + ".log", filemode='w', format='%(name)s - %(levelname)s - %(message)s')
+# # logging.basicConfig(filename="metrics data"+".log",format='')
 # logging.debug("model,trees,accuracy,time(s)")
+logging.getLogger('matplotlib').setLevel(logging.ERROR)
+logging.basicConfig(filename="metrics data"+".log",level=logging.DEBUG,format='')
+logging.debug("model,trees,accuracy,false positives,false negatives,f1 score")
+
+
 
 #*************************Implementing for loop*************************************************************************************************
-for i in range(0,1):
-    
+for i in range(0,10):
+
     target = "Vote(Yes/No)"  # Target variable is whether the target agent voted for us or not
 
     train_df = pd.read_csv('takeda training data.csv')
@@ -525,13 +521,14 @@ for i in range(0,1):
     print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y5, y_pred)))
 
     print()
-    # logging.debug("takeda  , {}  , {:02f}  , {:02f}  ".format(ntrees,metrics.accuracy_score(y5, y_pred) *100,calt ) )
     
+    # logging.debug("ensemble  , {}  , {:02f}  , {:02f}  ".format(ntrees,metrics.accuracy_score(y5, output)*100 ,calt ) )
 
 
-    #Plotting the confusion matrix
+    # Plotting the confusion matrix
 
     cm = confusion_matrix(y5, output)
+
     print(cm)
 
     fig, ax = plt.subplots(figsize=(8, 8))
@@ -561,17 +558,7 @@ for i in range(0,1):
     print(FN)
     print(f1_score)
 
-
-    # logging.debug("ensemble 5 player  , {}  , {:02f}  , {:02f} , {:02f}, {:02f}".format(ntrees,metrics.accuracy_score(y5, output)*100,f1_score,FP,FN ) )
-    # logging.debug("ensemble 5 player  , {}  , {:02f}".format(ntrees,metrics.accuracy_score(y5, output)*100 ) )
-    # score = f1_score(y5, y_pred, average='binary')
-    # print('F-Measure: %.3f' % score)
-    # logging.debug("ensemble  , {}  , {:02f}  , {:02f}  ".format(ntrees,metrics.accuracy_score(y5, output)*100 ,calt ) )
-
-
-    # # Plotting the confusion matrix
-
-    # cm = confusion_matrix(y5, y_pred)
+    logging.debug("ensemble(5 player)  , {}  , {:02f}  , {:02f} , {:02f} , {:02f} ".format(ntrees,metrics.accuracy_score(y5, y_pred) *100,FP,FN,f1_score ) )
 
     # fig, ax = plt.subplots(figsize=(8, 8))
     # ax.imshow(cm)
@@ -583,5 +570,26 @@ for i in range(0,1):
     #     for j in range(2):
     #         ax.text(j, i, cm[i, j], ha='center', va='center', color='red')
     # plt.show()
-# dataframe1 = pd.read_csv("metrics data.log")
-# dataframe1.to_csv('metrics data.csv', index = None)
+
+
+
+
+
+    # # Plotting the confusion matrix
+
+    # cm = confusion_matrix(y5, y_pred)
+
+
+
+    # fig, ax = plt.subplots(figsize=(8, 8))
+    # ax.imshow(cm)
+    # ax.grid(False)
+    # ax.xaxis.set(ticks=(0, 1), ticklabels=('Predicted 0s', 'Predicted 1s'))
+    # ax.yaxis.set(ticks=(0, 1), ticklabels=('Actual 0s', 'Actual 1s'))
+    # ax.set_ylim(1.5, -0.5)
+    # for i in range(2):
+    #     for j in range(2):
+    #         ax.text(j, i, cm[i, j], ha='center', va='center', color='red')
+    # plt.show()
+dataframe1 = pd.read_csv("metrics data.log")
+dataframe1.to_csv('metrics data.csv', index = None)
