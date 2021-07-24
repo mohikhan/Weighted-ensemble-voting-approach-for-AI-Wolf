@@ -532,15 +532,15 @@ for i in range(0,10):
     print(cm)
 
     fig, ax = plt.subplots(figsize=(8, 8))
-    ax.imshow(cm)
-    ax.grid(False)
-    ax.xaxis.set(ticks=(0, 1), ticklabels=('Predicted 0s', 'Predicted 1s'))
-    ax.yaxis.set(ticks=(0, 1), ticklabels=('Actual 0s', 'Actual 1s'))
-    ax.set_ylim(1.5, -0.5)
-    for i in range(2):
-        for j in range(2):
-            ax.text(j, i, cm[i, j], ha='center', va='center', color='red')
-    plt.show()
+    # ax.imshow(cm)
+    # ax.grid(False)
+    # ax.xaxis.set(ticks=(0, 1), ticklabels=('Predicted 0s', 'Predicted 1s'))
+    # ax.yaxis.set(ticks=(0, 1), ticklabels=('Actual 0s', 'Actual 1s'))
+    # ax.set_ylim(1.5, -0.5)
+    # for i in range(2):
+    #     for j in range(2):
+    #         ax.text(j, i, cm[i, j], ha='center', va='center', color='red')
+    # plt.show()
 
     TP = cm[1,0]
     FP = cm[0,1]
@@ -558,7 +558,7 @@ for i in range(0,10):
     print(FN)
     print(f1_score)
 
-    logging.debug("ensemble(5 player)  , {}  , {:02f}  , {:02f} , {:02f} , {:02f} ".format(ntrees,metrics.accuracy_score(y5, y_pred) *100,FP,FN,f1_score ) )
+    logging.debug("ensemble(15 player)  , {}  , {:02f}  , {:02f} , {:02f} , {:02f} ".format(ntrees,metrics.accuracy_score(y5, y_pred) *100,FP,FN,f1_score ) )
 
     # fig, ax = plt.subplots(figsize=(8, 8))
     # ax.imshow(cm)
