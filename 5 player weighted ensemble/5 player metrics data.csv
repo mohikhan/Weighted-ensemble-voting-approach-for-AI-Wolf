@@ -1,0 +1,11 @@
+model,trees,accuracy,false positives,false negatives,f1 score
+ensemble(5 player)  ,5,79.487179,2.0,3.0,0.897959
+ensemble(5 player)  ,5,77.777778,2.0,3.0,0.897959
+ensemble(5 player)  ,5,77.777778,2.0,4.0,0.875
+ensemble(5 player)  ,5,83.760684,9.0,5.0,0.740741
+ensemble(5 player)  ,5,76.923077,2.0,4.0,0.875
+ensemble(5 player)  ,5,79.487179,1.0,3.0,0.916667
+ensemble(5 player)  ,5,76.923077,2.0,4.0,0.875
+ensemble(5 player)  ,5,79.487179,2.0,3.0,0.897959
+ensemble(5 player)  ,5,77.777778,2.0,4.0,0.875
+ensemble(5 player)  ,5,76.923077,2.0,3.0,0.897959
