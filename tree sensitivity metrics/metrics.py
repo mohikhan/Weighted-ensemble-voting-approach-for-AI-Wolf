@@ -126,7 +126,7 @@ yensemble = yensemble/10
 # ytakeda=[77.77,76.92]
 xx=[5,10,25,50]
 GPU1=plt.plot(xx,yensemble,label='ensemble approach')
-plt.plot(xx,ytakeda,label='takeda approach')
+# plt.plot(xx,ytakeda,label='takeda approach')
 # plt.scatter(xx,yta)
 # plt.scatter(xx,yy1)
 plt.legend()
