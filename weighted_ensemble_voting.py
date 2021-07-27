@@ -10,7 +10,7 @@ import numpy as np
 import tensorflow as tf
 
 import time # Importing to calculate time
-start = time.process_time()
+
 
 ntrees = 5 # No of trees
 
@@ -32,6 +32,7 @@ for j in range(0,4):
 #*************************Implementing for loop*************************************************************************************************
     for i in range(0,10):
 
+        start = time.process_time()
         target = "Vote(Yes/No)"  # Target variable is whether the target agent voted for us or not
 
         train_df = pd.read_csv('takeda training data.csv')
@@ -505,6 +506,7 @@ for j in range(0,4):
 
 
         y_pred=takeda_forest_model.predict(x5)
+        calt = 0
         calt = time.process_time() - start
         # print("The time taken is = ",time.process_time() - start)
         # print(time.process_time() - start)          # Printing the time
