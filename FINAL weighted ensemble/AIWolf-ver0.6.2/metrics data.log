@@ -1,0 +1,2 @@
+model,trees,accuracy,time(s)
+negative talks,positive talks,Negative length,Vote(Yes/No)

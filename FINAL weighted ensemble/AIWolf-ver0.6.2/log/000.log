@@ -1,0 +1,12 @@
+0,status,1,VILLAGER,ALIVE,Sample4
+0,status,2,POSSESSED,ALIVE,Sample3
+0,status,3,SEER,ALIVE,Sample2
+0,status,4,WEREWOLF,ALIVE,Sample1
+0,status,5,VILLAGER,ALIVE,training data
+0,divine,3,5,HUMAN
+1,status,1,VILLAGER,ALIVE,Sample4
+1,status,2,POSSESSED,ALIVE,Sample3
+1,status,3,SEER,ALIVE,Sample2
+1,status,4,WEREWOLF,ALIVE,Sample1
+1,status,5,VILLAGER,ALIVE,training data
+Lost Connection of Agent[05]
