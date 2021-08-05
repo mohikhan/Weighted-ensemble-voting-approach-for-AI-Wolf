@@ -9,15 +9,15 @@ from fast_ml.model_development import train_valid_test_split
 import numpy as np
 import tensorflow as tf
 
-import time # Importing to calculate time
+# import time # Importing to calculate time
 
 
 ntrees = 5 # No of trees
 
 import logging, json  # to generate log file
 
-logging.basicConfig(filename="metrics data"+".log",level=logging.DEBUG,format='')
-logging.debug("model,trees,accuracy,time(s)")
+# logging.basicConfig(filename="metrics data"+".log",level=logging.DEBUG,format='')
+# logging.debug("model,trees,accuracy,time(s)")
 
 
 

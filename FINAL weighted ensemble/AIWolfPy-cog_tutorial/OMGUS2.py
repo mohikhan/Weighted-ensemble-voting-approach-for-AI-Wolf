@@ -222,11 +222,12 @@ class SampleAgent(object):
         #     self.result[p] = predict_vote(self.n_talks[p],self.p_talks[p],self.n_len[p])
 
         hatecycle = [
-        "REQUEST ANY (VOTE Agent[{:02d}])",
-        "ESTIMATE Agent[{:02d}] WEREWOLF",
-        "VOTE Agent[{:02d}]",
+        "ESTIMATE Agent[{:02d}] VILLAGER",
+        "ESTIMATE Agent[{:02d}] SEER",
+        "ESTIMATE Agent[{:02d}] MEDIUM",
+        "ESTIMATE Agent[{:02d}] BODYGUARD",
         ]
-        return hatecycle[randint(0,2)].format(self.hate)
+        return hatecycle[randint(0,3)].format(self.hate)
 
     def whisper(self):
         # logging.debug("# WHISPER")
@@ -249,3 +250,4 @@ agent = SampleAgent(myname)
 if __name__ == '__main__':
     # logging.debug("negative talks,positive talks,Negative length,Vote(Yes/No)") # Attributes name
     aiwolfpy.connect_parse(agent)
+
